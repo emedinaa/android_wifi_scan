@@ -18,7 +18,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:textStyle="bold"
         android:textColor="#ffffff"
         android:layout_below="@+id/tviMessage"
         android:lines="4"
