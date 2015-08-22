@@ -7,9 +7,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emedinaa.wifiscanner.model.WifiEntity;
 import com.emedinaa.wifiscanner.service.WifiReceiver;
+import com.emedinaa.wifiscanner.storage.DatabaseHelper;
+import com.emedinaa.wifiscanner.storage.WifiRepository;
+
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -31,6 +37,19 @@ public class MainActivity extends ActionBarActivity {
         WifiReceiver wifiReceiver = new WifiReceiver();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
+
+        WifiRepository wifiRepository = new WifiRepository(new DatabaseHelper(this));
+        List<WifiEntity> wifiEntities= wifiRepository.getWifiEntities();
+        int connections=wifiEntities.size();
+        String msg= "Conexiones DB "+connections+"\n";
+        if(connections>0)
+        {
+            WifiEntity wifiEntity= wifiEntities.get(0);
+            msg+="0:  SSID"+wifiEntity.getSSID()+ " BSSID "+wifiEntity.getBSSID()+ " level "+wifiEntity.getLevel()+
+                    " Frequency "+wifiEntity.getFrequency();
+
+            ((TextView)findViewById(R.id.tviConexionesDB)).setText(msg);
+        }
     }
 
     @Override

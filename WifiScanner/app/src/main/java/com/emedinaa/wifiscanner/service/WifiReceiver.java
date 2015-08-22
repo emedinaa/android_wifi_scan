@@ -8,6 +8,10 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.emedinaa.wifiscanner.model.WifiEntity;
+import com.emedinaa.wifiscanner.storage.DatabaseHelper;
+import com.emedinaa.wifiscanner.storage.WifiRepository;
+
 import java.util.List;
 
 /**
@@ -21,22 +25,33 @@ public class WifiReceiver extends BroadcastReceiver {
     private WifiManager wifiManager;
     private StringBuilder sb;
     private int wifiConnections;
+    private WifiRepository wifiRepository;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if(wifiManager==null)return;
 
+        wifiRepository = new WifiRepository(new DatabaseHelper(context));
+
         sb = new StringBuilder();
         wifiList = wifiManager.getScanResults();
         wifiConnections=wifiList.size();
         sb.append("\n Wifi connections :"+wifiConnections+"\n\n");
 
+        WifiEntity wifiEntity;
         for(int i = 0; i < wifiList.size(); i++){
 
             sb.append(new Integer(i+1).toString() + ". ");
             sb.append((wifiList.get(i)).toString());
             sb.append("\n\n");
+
+            wifiEntity= new WifiEntity();
+            wifiEntity.setSSID(wifiList.get(i).SSID);
+            wifiEntity.setBSSID(wifiList.get(i).BSSID);
+            wifiEntity.setFrequency(wifiList.get(i).frequency);
+            wifiEntity.setLevel(wifiList.get(i).level);
+            wifiRepository.saveOrUpdateWifi(wifiEntity);
         }
         Log.v(TAG, "sb " + sb);
         Toast.makeText(context,"Wifi connections :"+wifiConnections,Toast.LENGTH_SHORT).show();
