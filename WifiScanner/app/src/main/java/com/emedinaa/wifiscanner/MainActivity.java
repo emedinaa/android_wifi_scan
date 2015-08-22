@@ -38,8 +38,8 @@ public class MainActivity extends ActionBarActivity {
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
 
-        WifiRepository wifiRepository = new WifiRepository(new DatabaseHelper(this));
-        List<WifiEntity> wifiEntities= wifiRepository.getWifiEntities();
+        WifiRepository wifiRepository = new WifiRepository(this);
+        List<WifiEntity> wifiEntities= wifiRepository.getAll();
         int connections=wifiEntities.size();
         String msg= "Conexiones DB "+connections+"\n";
         if(connections>0)

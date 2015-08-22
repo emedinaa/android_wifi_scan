@@ -11,6 +11,9 @@ import java.io.Serializable;
 @DatabaseTable(tableName = "wifitb")
 public class WifiEntity implements Serializable {
 
+    @DatabaseField(generatedId = true)
+    private int id;
+
     @DatabaseField
     private String SSID;
 
@@ -53,5 +56,13 @@ public class WifiEntity implements Serializable {
 
     public void setFrequency(int frequency) {
         this.frequency = frequency;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

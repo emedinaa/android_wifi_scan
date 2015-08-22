@@ -32,7 +32,7 @@ public class WifiReceiver extends BroadcastReceiver {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if(wifiManager==null)return;
 
-        wifiRepository = new WifiRepository(new DatabaseHelper(context));
+        wifiRepository = new WifiRepository(context);
 
         sb = new StringBuilder();
         wifiList = wifiManager.getScanResults();
@@ -51,7 +51,7 @@ public class WifiReceiver extends BroadcastReceiver {
             wifiEntity.setBSSID(wifiList.get(i).BSSID);
             wifiEntity.setFrequency(wifiList.get(i).frequency);
             wifiEntity.setLevel(wifiList.get(i).level);
-            wifiRepository.saveOrUpdateWifi(wifiEntity);
+            wifiRepository.createUpdate(wifiEntity);
         }
         Log.v(TAG, "sb " + sb);
         Toast.makeText(context,"Wifi connections :"+wifiConnections,Toast.LENGTH_SHORT).show();
